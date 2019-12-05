@@ -1,0 +1,46 @@
+Original
+
+>   move pointer right
+<   move pointer left
++   increment at pointer
+-   decrement at pointer
+[   jump forward to corresponding bracket if zero at pointer   
+]   jump back to corresponding bracket                                      (Implementation: no increment program counter)
+.   writes from pointer at address in register to write-only tape
+,   reads from address in register from the read-only tape to pointer
+
+New
+
+@   jumps to address on tape
+^   copies from pointer to copy register
+*   copies from copy register to pointer
+~   rotate right shift
+&   bitwise nand register and tape to tape
+#   jumps to specified page from pointer
+}   page right
+{   page left
+
+Peripherals tape notes
+
+WO: (set clock) - (sys)virt - (sys)virt      - (sys)virt      - (syscall)virt        - [0] peripheral start (takes 1 slot)
+
+RO: (clock)     - (# pages) - (page pointer) - (data pointer) - (# peripheral slots) - [0] peripheral start (takes 1 slot)
+
+-- Bitwise Operations Notes ----------------------
+
+#
+^
+
+^&                      not
+
+#-#
+^
+
+^>&^&                   and
+^&>^&^<&                or
+
+#-#-#
+^
+
+^>>*<^>&^<<&>>^<&^<&    xor
+
