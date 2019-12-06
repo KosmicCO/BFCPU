@@ -14,7 +14,8 @@ const std::vector<Peripheral *> EMPTY_PV = std::vector<Peripheral *>();
 
 class BFCPUInterpreter {
     public:
-        BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs);
+        BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages);
+        BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs) : BFCPUInterpreter(rom, perphs, DEFAULT_NUM_PAGES) {}
         BFCPUInterpreter(std::istream &rom) : BFCPUInterpreter(rom, EMPTY_PV) {}
         ~BFCPUInterpreter();
 

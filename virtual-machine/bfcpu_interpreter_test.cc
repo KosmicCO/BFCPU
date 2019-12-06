@@ -19,7 +19,7 @@ int main(int argc, char ** argv) {
     std::istream &rom_stream = rom_prog;
     std::vector<Peripheral *> perphs;
     perphs.push_back(new NonProtocolPrint());
-    BFCPUInterpreter bfi(rom_stream, perphs);
+    BFCPUInterpreter bfi(rom_stream, perphs, 1948);
     rom_prog.close();
 
     while(bfi.next());

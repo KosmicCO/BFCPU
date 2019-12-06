@@ -53,7 +53,7 @@ int * create_jumps(char * prog, int len) {
     return jumps;
 }
 
-BFCPUInterpreter::BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs) {
+BFCPUInterpreter::BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages) {
     prog = new char[ROM_SIZE];
     std::fill(prog, prog + ROM_SIZE, 0);
     auto i = 0;
@@ -62,9 +62,6 @@ BFCPUInterpreter::BFCPUInterpreter(std::istream &rom, const std::vector<Peripher
             throw std::runtime_error("Program too large to fit on ROM.");
         }
         char c = rom.get();
-//        if(!is_bfcpu_char(c)) {
-//            throw std::runtime_error("Program contains illegal characters: " + c);
-//        }
         if(is_bfcpu_char(c)) {
             prog[i] = c;
             i++;
@@ -82,7 +79,7 @@ BFCPUInterpreter::BFCPUInterpreter(std::istream &rom, const std::vector<Peripher
 
     clock_time = 0;
     
-    data_tape = new DataTape(DEFAULT_NUM_PAGES);
+    data_tape = new DataTape(num_pages);
     perp_tape = new PeripheralTape(perphs, this);
 }
 
