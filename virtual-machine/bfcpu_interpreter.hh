@@ -27,6 +27,7 @@ class BFCPUInterpreter {
         uint16_t get_page_ptr();
         uint16_t get_data_ptr();
 
+        void get_tape_data(uint16_t start, uint16_t end, uint16_t * arr);
     private:
         char * prog;
         int * jumps;

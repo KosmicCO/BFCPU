@@ -43,3 +43,14 @@ uint16_t DataTape::get_page() {
 uint16_t DataTape::get_num_pages() {
     return num_pages;
 }
+
+void DataTape::get_data(uint16_t start, uint16_t end, uint16_t * arr) {
+    uint16_t mem_index = start;
+    int arr_index = 0;
+    while(mem_index != end) {
+        arr[arr_index] = memory[page][mem_index];
+        arr_index++;
+        mem_index++;
+    }
+
+}

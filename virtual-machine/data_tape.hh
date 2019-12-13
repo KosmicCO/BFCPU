@@ -16,6 +16,8 @@ class DataTape : public Tape {
         void set_page(uint16_t page);
         uint16_t get_page();
         uint16_t get_num_pages();
+
+        void get_data(uint16_t start, uint16_t end, uint16_t * arr);
     private:
         uint16_t ** memory;
         uint16_t num_pages;

@@ -146,6 +146,10 @@ uint16_t BFCPUInterpreter::get_data_ptr() {
     return data_ptr;
 }
 
+void BFCPUInterpreter::get_tape_data(uint16_t start, uint16_t end, uint16_t * arr) {
+    data_tape->get_data(start, end, arr);
+}
+
 uint16_t BFCPUInterpreter::at_ptr() {
     return data_tape->read(data_ptr);
 }
