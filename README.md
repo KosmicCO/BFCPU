@@ -3,6 +3,8 @@
 ### List of In-Development Units
 
  - NCurses interactive virtual machine
+ - Memory structure
+ - Window to view memory
  
 ### List of In-Progress Unit Testing
 

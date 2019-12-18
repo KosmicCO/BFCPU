@@ -8,7 +8,7 @@ TESTOBJ=data_tape_test.o peripheral_tape_test.o bfcpu_interpreter.o bfcpu_interp
 OBJ=$(SRC:.cc=.o)
 
 lib: $(OBJ)
-	ar rcs bfcpu_virtual_arch.a $(OBJ)
+	ar rcs libbfcpu_virtual_arch.a $(OBJ)
 
 bfcpu_interpreter_test: bfcpu_interpreter_test.o $(OBJ)
 	$(CXX) $(LDFLAGS) -o bfcpu_interpreter_test bfcpu_interpreter_test.o $(OBJ)
