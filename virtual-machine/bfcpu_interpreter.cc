@@ -53,7 +53,7 @@ int * create_jumps(char * prog, int len) {
     return jumps;
 }
 
-BFCPUInterpreter::BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages) {
+void BFCPUInterpreter::construct_sequence(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages) {
     prog = new char[ROM_SIZE];
     std::fill(prog, prog + ROM_SIZE, 0);
     auto i = 0;
@@ -81,6 +81,21 @@ BFCPUInterpreter::BFCPUInterpreter(std::istream &rom, const std::vector<Peripher
     
     data_tape = new DataTape(num_pages);
     perp_tape = new PeripheralTape(perphs, this);
+}
+
+BFCPUInterpreter::BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages) {
+    construct_sequence(rom, perphs, num_pages);
+}
+
+BFCPUInterpreter::BFCPUInterpreter(const std::string &file, const std::vector<Peripheral *> &perphs, int num_pages) {
+    std::ifstream rom_prog;
+    rom_prog.open(file);
+    if(!rom_prog) {
+        throw std::runtime_error("Could not read from file.");
+    }
+
+    construct_sequence(rom_prog, perphs, num_pages);
+    rom_prog.close();
 }
 
 BFCPUInterpreter::~BFCPUInterpreter() {
@@ -148,6 +163,10 @@ uint16_t BFCPUInterpreter::get_data_ptr() {
 
 void BFCPUInterpreter::get_tape_data(uint16_t start, uint16_t end, uint16_t * arr) {
     data_tape->get_data(start, end, arr);
+}
+
+void BFCPUInterpreter::get_tape_data_from_page(uint16_t start, uint16_t end, uint16_t * arr, uint16_t from_page) {
+    data_tape->get_data_from_page(start, end, arr, from_page);
 }
 
 uint16_t BFCPUInterpreter::at_ptr() {

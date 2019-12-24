@@ -7,7 +7,7 @@ int main() {
     uint16_t indices[] = {19048, 65535, 0, 182};
     try {
         for(auto i = 0; i < 5; i++) {
-            dt.setPage(pages[i]);
+            dt.set_page(pages[i]);
             std::cout << "For page: " << pages[i] << std::endl;
             std::cout << "  Read 0s test:" << std::endl;
             for(auto j = 0; j < 4; j++) {
@@ -25,7 +25,7 @@ int main() {
     }
 
     try {
-        dt.setPage(18);
+        dt.set_page(18);
     } catch(...) {
         std::cout << "caught" << std::endl;
         return 2;

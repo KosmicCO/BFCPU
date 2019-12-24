@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <vector>
 #include <stack>
+#include <string>
+#include <fstream>
 
 const int ROM_SIZE = 1 << 20;
 const int DEFAULT_NUM_PAGES = 1024;
@@ -17,6 +19,12 @@ class BFCPUInterpreter {
         BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages);
         BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs) : BFCPUInterpreter(rom, perphs, DEFAULT_NUM_PAGES) {}
         BFCPUInterpreter(std::istream &rom) : BFCPUInterpreter(rom, EMPTY_PV) {}
+        BFCPUInterpreter(std::istream &rom, int num_pages) : BFCPUInterpreter(rom, EMPTY_PV, num_pages) {}
+
+        BFCPUInterpreter(const std::string &file, const std::vector<Peripheral *> &perphs, int num_pages);
+        BFCPUInterpreter(const std::string &file, const std::vector<Peripheral *> &perphs) : BFCPUInterpreter(file, perphs, DEFAULT_NUM_PAGES) {}
+        BFCPUInterpreter(const std::string &file) : BFCPUInterpreter(file, EMPTY_PV) {}
+        BFCPUInterpreter(const std::string &file, int num_pages) : BFCPUInterpreter(file, EMPTY_PV, num_pages) {}
         ~BFCPUInterpreter();
 
         bool next(); // returns false when cannot run
@@ -28,6 +36,7 @@ class BFCPUInterpreter {
         uint16_t get_data_ptr();
 
         void get_tape_data(uint16_t start, uint16_t end, uint16_t * arr);
+        void get_tape_data_from_page(uint16_t start, uint16_t end, uint16_t * arr, uint16_t from_page);
     private:
         char * prog;
         int * jumps;
@@ -37,6 +46,8 @@ class BFCPUInterpreter {
         uint16_t buffer;
         DataTape * data_tape;
         PeripheralTape * perp_tape;
+
+        void construct_sequence(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages);
 
         uint16_t clock_time;
         
