@@ -53,7 +53,7 @@ int * create_jumps(char * prog, int len) {
     return jumps;
 }
 
-void BFCPUInterpreter::construct_sequence(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages) {
+void BFCPUInterpreter::construct_sequence(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages, bool strip) {
     prog = new char[ROM_SIZE];
     std::fill(prog, prog + ROM_SIZE, 0);
     auto i = 0;
@@ -62,7 +62,7 @@ void BFCPUInterpreter::construct_sequence(std::istream &rom, const std::vector<P
             throw std::runtime_error("Program too large to fit on ROM.");
         }
         char c = rom.get();
-        if(is_bfcpu_char(c)) {
+        if(!strip || is_bfcpu_char(c)) {
             prog[i] = c;
             i++;
         }
@@ -83,18 +83,18 @@ void BFCPUInterpreter::construct_sequence(std::istream &rom, const std::vector<P
     perp_tape = new PeripheralTape(perphs, this);
 }
 
-BFCPUInterpreter::BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages) {
-    construct_sequence(rom, perphs, num_pages);
+BFCPUInterpreter::BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages, bool strip) {
+    construct_sequence(rom, perphs, num_pages, strip);
 }
 
-BFCPUInterpreter::BFCPUInterpreter(const std::string &file, const std::vector<Peripheral *> &perphs, int num_pages) {
+BFCPUInterpreter::BFCPUInterpreter(const std::string &file, const std::vector<Peripheral *> &perphs, int num_pages, bool strip) {
     std::ifstream rom_prog;
     rom_prog.open(file);
     if(!rom_prog) {
         throw std::runtime_error("Could not read from file.");
     }
 
-    construct_sequence(rom_prog, perphs, num_pages);
+    construct_sequence(rom_prog, perphs, num_pages, strip);
     rom_prog.close();
 }
 
@@ -107,7 +107,7 @@ BFCPUInterpreter::~BFCPUInterpreter() {
 
 
 
-bool BFCPUInterpreter::next() {
+bool BFCPUInterpreter::next(bool comm) {
     // TODO: finish
     // TODO: also have each of the private helper functions apply a change to the program counter
 
@@ -116,6 +116,7 @@ bool BFCPUInterpreter::next() {
     }
 
     char c = prog[prog_ptr];
+
     switch(c) {
         case '>': move_right();     break;
         case '<': move_left();      break;
@@ -133,10 +134,22 @@ bool BFCPUInterpreter::next() {
         case '#': jump_page();      break;
         case '}': page_right();     break;
         case '{': page_left();      break;
-        default: throw std::runtime_error("Cannot parse command: " + c);
+        default:  pinc();           return true;
     }
 
     clock_time++;
+
+    if(comm) {
+        c = prog[prog_ptr];
+
+        while(!is_bfcpu_char(c)) {
+            if(prog_ptr >= prog_len) {
+                return false;
+            }
+            pinc();
+            c = prog[prog_ptr];
+        }
+    }
 
     return true;
 }
@@ -159,6 +172,10 @@ uint16_t BFCPUInterpreter::get_page_ptr() {
 
 uint16_t BFCPUInterpreter::get_data_ptr() {
     return data_ptr;
+}
+
+uint16_t BFCPUInterpreter::get_prog_ptr() {
+    return prog_ptr;
 }
 
 void BFCPUInterpreter::get_tape_data(uint16_t start, uint16_t end, uint16_t * arr) {
@@ -213,7 +230,11 @@ void BFCPUInterpreter::read() {
 }
 
 void BFCPUInterpreter::loop_back() {
-    prog_ptr = jumps[prog_ptr];
+    if(!at_ptr()) {
+        pinc();
+    } else {
+        prog_ptr = jumps[prog_ptr];
+    }
 }
 
 void BFCPUInterpreter::loop_forward() {

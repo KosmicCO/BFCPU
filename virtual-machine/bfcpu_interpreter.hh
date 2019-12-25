@@ -14,26 +14,23 @@ const int ROM_SIZE = 1 << 20;
 const int DEFAULT_NUM_PAGES = 1024;
 const std::vector<Peripheral *> EMPTY_PV = std::vector<Peripheral *>();
 
+bool is_bfcpu_char(char c);
+
 class BFCPUInterpreter {
     public:
-        BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages);
-        BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs) : BFCPUInterpreter(rom, perphs, DEFAULT_NUM_PAGES) {}
-        BFCPUInterpreter(std::istream &rom) : BFCPUInterpreter(rom, EMPTY_PV) {}
-        BFCPUInterpreter(std::istream &rom, int num_pages) : BFCPUInterpreter(rom, EMPTY_PV, num_pages) {}
+        BFCPUInterpreter(std::istream &rom, const std::vector<Peripheral *> &perphs=EMPTY_PV, int num_pages=DEFAULT_NUM_PAGES, bool strip=true);
 
-        BFCPUInterpreter(const std::string &file, const std::vector<Peripheral *> &perphs, int num_pages);
-        BFCPUInterpreter(const std::string &file, const std::vector<Peripheral *> &perphs) : BFCPUInterpreter(file, perphs, DEFAULT_NUM_PAGES) {}
-        BFCPUInterpreter(const std::string &file) : BFCPUInterpreter(file, EMPTY_PV) {}
-        BFCPUInterpreter(const std::string &file, int num_pages) : BFCPUInterpreter(file, EMPTY_PV, num_pages) {}
+        BFCPUInterpreter(const std::string &file, const std::vector<Peripheral *> &perphs=EMPTY_PV, int num_pages=DEFAULT_NUM_PAGES, bool strip=true);
         ~BFCPUInterpreter();
 
-        bool next(); // returns false when cannot run
+        bool next(bool comm=true); // returns false when cannot run
         
         uint16_t get_time();
         void set_time(uint16_t ntime);
         uint16_t get_num_pages();
         uint16_t get_page_ptr();
         uint16_t get_data_ptr();
+        uint16_t get_prog_ptr();
 
         void get_tape_data(uint16_t start, uint16_t end, uint16_t * arr);
         void get_tape_data_from_page(uint16_t start, uint16_t end, uint16_t * arr, uint16_t from_page);
@@ -47,7 +44,7 @@ class BFCPUInterpreter {
         DataTape * data_tape;
         PeripheralTape * perp_tape;
 
-        void construct_sequence(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages);
+        void construct_sequence(std::istream &rom, const std::vector<Peripheral *> &perphs, int num_pages, bool strip);
 
         uint16_t clock_time;
         
