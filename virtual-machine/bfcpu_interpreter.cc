@@ -182,6 +182,14 @@ void BFCPUInterpreter::get_tape_data(uint16_t start, uint16_t end, uint16_t * ar
     data_tape->get_data(start, end, arr);
 }
 
+void BFCPUInterpreter::set_tape_at(uint16_t addr, uint16_t value) {
+    data_tape->write(addr, value);
+}
+
+void BFCPUInterpreter::set_tape_at_page(uint16_t addr, uint16_t to_page, uint16_t value) {
+    data_tape->write_to_page(addr, to_page, value);
+}
+
 void BFCPUInterpreter::get_tape_data_from_page(uint16_t start, uint16_t end, uint16_t * arr, uint16_t from_page) {
     data_tape->get_data_from_page(start, end, arr, from_page);
 }

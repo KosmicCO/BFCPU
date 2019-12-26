@@ -70,3 +70,8 @@ void DataTape::get_data_from_page(uint16_t start, uint16_t end, uint16_t * arr, 
    }
 
 }
+
+void DataTape::write_to_page(uint16_t address, uint16_t to_page, uint16_t value) {
+    touch_page(to_page);
+    memory[to_page][address] = value;
+}
