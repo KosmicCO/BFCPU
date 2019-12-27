@@ -1,0 +1,599 @@
+==16123== Memcheck, a memory error detector
+==16123== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==16123== Using Valgrind-3.15.0-608cb11914-20190413X and LibVEX; rerun with -h for copyright info
+==16123== Command: ./bfcpu_environment prog.bf
+==16123== Parent PID: 3756
+==16123== 
+--16123-- 
+--16123-- Valgrind options:
+--16123--    --leak-check=full
+--16123--    --show-leak-kinds=all
+--16123--    --log-file=bev.log
+--16123--    -v
+--16123-- Contents of /proc/version:
+--16123--   Linux version 5.3.13-arch1-1 (linux@archlinux) (gcc version 9.2.0 (GCC)) #1 SMP PREEMPT Sun, 24 Nov 2019 10:15:50 +0000
+--16123-- 
+--16123-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand
+--16123-- Page sizes: currently 4096, max supported 4096
+--16123-- Valgrind library directory: /usr/lib/valgrind
+--16123-- Reading syms from /home/kosmic/projects/bfcpu/virtual-debug-environment/bfcpu_environment
+--16123-- Reading syms from /usr/lib/ld-2.30.so
+--16123-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
+--16123--    object doesn't have a dynamic symbol table
+--16123-- Scheduler: using generic scheduler lock implementation.
+--16123-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==16123== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-16123-by-kosmic-on-???
+==16123== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-16123-by-kosmic-on-???
+==16123== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-16123-by-kosmic-on-???
+==16123== 
+==16123== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==16123== don't want to do, unless you know exactly what you're doing,
+==16123== or are doing some strange experiment):
+==16123==   /usr/lib/valgrind/../../bin/vgdb --pid=16123 ...command...
+==16123== 
+==16123== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==16123==   /path/to/gdb ./bfcpu_environment
+==16123== and then give GDB the following command
+==16123==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=16123
+==16123== --pid is optional if only one valgrind process is running
+==16123== 
+--16123-- REDIR: 0x40203a0 (ld-linux-x86-64.so.2:strlen) redirected to 0x580c7532 (vgPlain_amd64_linux_REDIR_FOR_strlen)
+--16123-- REDIR: 0x4020170 (ld-linux-x86-64.so.2:index) redirected to 0x580c754c (vgPlain_amd64_linux_REDIR_FOR_index)
+--16123-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--16123-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+==16123== WARNING: new redirection conflicts with existing -- ignoring it
+--16123--     old: 0x040203a0 (strlen              ) R-> (0000.0) 0x580c7532 vgPlain_amd64_linux_REDIR_FOR_strlen
+--16123--     new: 0x040203a0 (strlen              ) R-> (2007.0) 0x0483bda0 strlen
+--16123-- REDIR: 0x401cb80 (ld-linux-x86-64.so.2:strcmp) redirected to 0x483cc90 (strcmp)
+--16123-- REDIR: 0x4020900 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4840670 (mempcpy)
+--16123-- Reading syms from /usr/lib/libncursesw.so.6.1
+--16123--    object doesn't have a symbol table
+--16123-- Reading syms from /usr/lib/libboost_regex.so.1.71.0
+--16123--    object doesn't have a symbol table
+--16123-- Reading syms from /usr/lib/libstdc++.so.6.0.27
+--16123-- Reading syms from /usr/lib/libm-2.30.so
+--16123--    object doesn't have a symbol table
+--16123-- Reading syms from /usr/lib/libgcc_s.so.1
+--16123-- Reading syms from /usr/lib/libc-2.30.so
+--16123-- Reading syms from /usr/lib/librt-2.30.so
+--16123--    object doesn't have a symbol table
+--16123-- Reading syms from /usr/lib/libicui18n.so.65.1
+--16123--    object doesn't have a symbol table
+--16123-- Reading syms from /usr/lib/libicuuc.so.65.1
+--16123--    object doesn't have a symbol table
+--16123-- Reading syms from /usr/lib/libpthread-2.30.so
+--16123-- Reading syms from /usr/lib/libdl-2.30.so
+--16123--    object doesn't have a symbol table
+--16123-- REDIR: 0x4db3c60 (libc.so.6:memmove) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db2fe0 (libc.so.6:strncpy) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3f90 (libc.so.6:strcasecmp) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db2900 (libc.so.6:strcat) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3040 (libc.so.6:rindex) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db5330 (libc.so.6:rawmemchr) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4dcd800 (libc.so.6:wmemchr) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4dcd340 (libc.so.6:wcscmp) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3dc0 (libc.so.6:mempcpy) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3bf0 (libc.so.6:bcmp) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db2f70 (libc.so.6:strncmp) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db29b0 (libc.so.6:strcmp) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3d20 (libc.so.6:memset) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4dcd300 (libc.so.6:wcschr) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db2ed0 (libc.so.6:strnlen) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db2a90 (libc.so.6:strcspn) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3fe0 (libc.so.6:strncasecmp) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db2a30 (libc.so.6:strcpy) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db4130 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4dcea50 (libc.so.6:wcsnlen) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4dcd380 (libc.so.6:wcscpy) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3080 (libc.so.6:strpbrk) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db2960 (libc.so.6:index) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db2e90 (libc.so.6:strlen) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db9760 (libc.so.6:memrchr) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db4030 (libc.so.6:strcasecmp_l) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3bb0 (libc.so.6:memchr) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4dcd450 (libc.so.6:wcslen) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3340 (libc.so.6:strspn) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3f30 (libc.so.6:stpncpy) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3ed0 (libc.so.6:stpcpy) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db5370 (libc.so.6:strchrnul) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db4080 (libc.so.6:strncasecmp_l) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db3ad0 (libc.so.6:strstr) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4db2f10 (libc.so.6:strncat) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4e30f90 (libc.so.6:__memmove_chk) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+--16123-- REDIR: 0x4e30ed0 (libc.so.6:__memcpy_chk) redirected to 0x482e1c0 (_vgnU_ifunc_wrapper)
+==16123== WARNING: new redirection conflicts with existing -- ignoring it
+--16123--     old: 0x04e886e0 (__memcpy_chk_avx_una) R-> (2024.0) 0x04840170 __memmove_chk
+--16123--     new: 0x04e886e0 (__memcpy_chk_avx_una) R-> (2030.0) 0x04840750 __memcpy_chk
+==16123== WARNING: new redirection conflicts with existing -- ignoring it
+--16123--     old: 0x04e886e0 (__memcpy_chk_avx_una) R-> (2024.0) 0x04840170 __memmove_chk
+--16123--     new: 0x04e886e0 (__memcpy_chk_avx_una) R-> (2030.0) 0x04840750 __memcpy_chk
+==16123== WARNING: new redirection conflicts with existing -- ignoring it
+--16123--     old: 0x04e886e0 (__memcpy_chk_avx_una) R-> (2024.0) 0x04840170 __memmove_chk
+--16123--     new: 0x04e886e0 (__memcpy_chk_avx_una) R-> (2030.0) 0x04840750 __memcpy_chk
+==16123== WARNING: new redirection conflicts with existing -- ignoring it
+--16123--     old: 0x04e886e0 (__memcpy_chk_avx_una) R-> (2024.0) 0x04840170 __memmove_chk
+--16123--     new: 0x04e886e0 (__memcpy_chk_avx_una) R-> (2030.0) 0x04840750 __memcpy_chk
+--16123-- REDIR: 0x4e85510 (libc.so.6:__strrchr_avx2) redirected to 0x483b7b0 (rindex)
+--16123-- REDIR: 0x4daee10 (libc.so.6:malloc) redirected to 0x4838710 (malloc)
+--16123-- REDIR: 0x4e856e0 (libc.so.6:__strlen_avx2) redirected to 0x483bc80 (strlen)
+--16123-- REDIR: 0x4e81cd0 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x483ee80 (bcmp)
+--16123-- REDIR: 0x4e80be0 (libc.so.6:__strcmp_avx2) redirected to 0x483cb90 (strcmp)
+--16123-- REDIR: 0x4e81020 (libc.so.6:__strncmp_avx2) redirected to 0x483c370 (strncmp)
+--16123-- REDIR: 0x4dafb90 (libc.so.6:calloc) redirected to 0x483aab0 (calloc)
+--16123-- REDIR: 0x4e85320 (libc.so.6:__strchrnul_avx2) redirected to 0x48401e0 (strchrnul)
+--16123-- REDIR: 0x4e85880 (libc.so.6:__strnlen_avx2) redirected to 0x483bc20 (strnlen)
+--16123-- REDIR: 0x4e850f0 (libc.so.6:__strchr_avx2) redirected to 0x483b930 (index)
+--16123-- REDIR: 0x4daf450 (libc.so.6:free) redirected to 0x4839940 (free)
+--16123-- REDIR: 0x4e886f0 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x483f690 (memmove)
+--16123-- REDIR: 0x4e86c20 (libc.so.6:__strcpy_avx2) redirected to 0x483bdd0 (strcpy)
+--16123-- REDIR: 0x4db37f0 (libc.so.6:__GI_strstr) redirected to 0x48408c0 (__strstr_sse2)
+--16123-- REDIR: 0x4e886e0 (libc.so.6:__memcpy_chk_avx_unaligned_erms) redirected to 0x4840170 (__memmove_chk)
+--16123-- REDIR: 0x4daf6c0 (libc.so.6:realloc) redirected to 0x483ad00 (realloc)
+--16123-- REDIR: 0x4e86fb0 (libc.so.6:__strncpy_avx2) redirected to 0x483bf70 (strncpy)
+--16123-- REDIR: 0x4dcbfa0 (libc.so.6:__strstr_sse2_unaligned) redirected to 0x4840850 (strstr)
+--16123-- REDIR: 0x4a7bd10 (libstdc++.so.6:operator new[](unsigned long)) redirected to 0x48394a0 (operator new[](unsigned long))
+--16123-- REDIR: 0x4a7bcb0 (libstdc++.so.6:operator new(unsigned long)) redirected to 0x4838d80 (operator new(unsigned long))
+--16123-- REDIR: 0x4a79ea0 (libstdc++.so.6:operator delete(void*)) redirected to 0x4839e40 (operator delete(void*))
+--16123-- REDIR: 0x4a79ed0 (libstdc++.so.6:operator delete[](void*)) redirected to 0x483a520 (operator delete[](void*))
+--16123-- REDIR: 0x4e88b70 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x483f580 (memset)
+--16123-- REDIR: 0x4a79eb0 (libstdc++.so.6:operator delete(void*, unsigned long)) redirected to 0x483a020 (operator delete(void*, unsigned long))
+==16123== 
+==16123== HEAP SUMMARY:
+==16123==     in use at exit: 514,590 bytes in 380 blocks
+==16123==   total heap usage: 425 allocs, 45 frees, 1,813,180 bytes allocated
+==16123== 
+==16123== Searching for pointers to 380 not-freed blocks
+==16123== Checked 990,464 bytes
+==16123== 
+==16123== 13 bytes in 1 blocks are still reachable in loss record 1 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x4DB2BEE: strdup (in /usr/lib/libc-2.30.so)
+==16123==    by 0x48A5259: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A5521: _nc_first_db (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF279: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 15 bytes in 1 blocks are still reachable in loss record 2 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x4DB2BEE: strdup (in /usr/lib/libc-2.30.so)
+==16123==    by 0x48A8417: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 24 bytes in 1 blocks are still reachable in loss record 3 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48A3573: _nc_add_to_try (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A5EAE: _nc_init_keytry (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A71F5: _nc_keypad (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C87E: main (bfcpu_environment.cc:17)
+==16123== 
+==16123== 25 bytes in 1 blocks are still reachable in loss record 4 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x48A5DF7: _nc_home_terminfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A550B: _nc_first_db (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF279: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 28 bytes in 1 blocks are still reachable in loss record 5 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x4890630: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 32 bytes in 1 blocks are still reachable in loss record 6 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48A562C: _nc_first_db (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF279: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 47 bytes in 1 blocks are still reachable in loss record 7 of 45
+==16123==    at 0x483AD7B: realloc (vg_replace_malloc.c:836)
+==16123==    by 0x48A5A54: _nc_doalloc (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AE995: _nc_read_termtype (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AEDAD: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF175: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF2A5: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 47 bytes in 1 blocks are still reachable in loss record 8 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x48A3B4F: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A83E1: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 66 bytes in 1 blocks are still reachable in loss record 9 of 45
+==16123==    at 0x483AD7B: realloc (vg_replace_malloc.c:836)
+==16123==    by 0x48A5A54: _nc_doalloc (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AB1F4: tparm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488B88F: _nc_mvcur_init_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C2A2: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 72 bytes in 1 blocks are still reachable in loss record 10 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x48A558E: _nc_first_db (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF279: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 80 bytes in 1 blocks are still reachable in loss record 11 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x48A3BC4: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A83E1: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 103 bytes in 1 blocks are still reachable in loss record 12 of 45
+==16123==    at 0x483AD7B: realloc (vg_replace_malloc.c:836)
+==16123==    by 0x48A5A54: _nc_doalloc (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A9A83: _nc_tparm_analyze (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A9D19: tparm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4883354: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48846C2: _nc_do_color_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x489CDBE: doupdate_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488E286: wrefresh (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10DECF: CommandWin::update() (command_win.cc:25)
+==16123==    by 0x10F1AB: CommandWin::next_comm() (command_win.cc:249)
+==16123==    by 0x10C913: main (bfcpu_environment.cc:25)
+==16123== 
+==16123== 128 bytes in 1 blocks are still reachable in loss record 13 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48905FC: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 152 bytes in 1 blocks are still reachable in loss record 14 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x487F1B9: _nc_scroll_optimize_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x489D778: doupdate_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488E286: wrefresh (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x118B7A: getnstr_esc_seed(char*, int) (ncurses_util.cc:77)
+==16123==    by 0x10F0B4: CommandWin::take_inline(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (command_win.cc:237)
+==16123==    by 0x10EF81: CommandWin::take_inline() (command_win.cc:226)
+==16123==    by 0x10F4A3: CommandWin::next_comm() (command_win.cc:285)
+==16123==    by 0x10C913: main (bfcpu_environment.cc:25)
+==16123== 
+==16123== 160 bytes in 1 blocks are still reachable in loss record 15 of 45
+==16123==    at 0x483AD7B: realloc (vg_replace_malloc.c:836)
+==16123==    by 0x48A5A54: _nc_doalloc (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AE9B4: _nc_read_termtype (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AEDAD: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF175: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF2A5: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 280 bytes in 1 blocks are still reachable in loss record 16 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48A8362: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 296 bytes in 1 blocks are still reachable in loss record 17 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x488C7A6: _nc_makenew_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C9AF: newwin_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890A49: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 296 bytes in 1 blocks are still reachable in loss record 18 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x488C7A6: _nc_makenew_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C9AF: newwin_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890A6F: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 296 bytes in 1 blocks are still reachable in loss record 19 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x488C7A6: _nc_makenew_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C9AF: newwin_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890C01: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 304 bytes in 1 blocks are still reachable in loss record 20 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x487FCC0: _nc_hash_map_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x487F125: _nc_scroll_optimize_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x489D778: doupdate_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488E286: wrefresh (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x118B7A: getnstr_esc_seed(char*, int) (ncurses_util.cc:77)
+==16123==    by 0x10F0B4: CommandWin::take_inline(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (command_win.cc:237)
+==16123==    by 0x10EF81: CommandWin::take_inline() (command_win.cc:226)
+==16123==    by 0x10F4A3: CommandWin::next_comm() (command_win.cc:285)
+==16123==    by 0x10C913: main (bfcpu_environment.cc:25)
+==16123== 
+==16123== 304 bytes in 1 blocks are still reachable in loss record 21 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x487FDD2: _nc_hash_map_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x487F125: _nc_scroll_optimize_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x489D778: doupdate_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488E286: wrefresh (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x118B7A: getnstr_esc_seed(char*, int) (ncurses_util.cc:77)
+==16123==    by 0x10F0B4: CommandWin::take_inline(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (command_win.cc:237)
+==16123==    by 0x10EF81: CommandWin::take_inline() (command_win.cc:226)
+==16123==    by 0x10F4A3: CommandWin::next_comm() (command_win.cc:285)
+==16123==    by 0x10C913: main (bfcpu_environment.cc:25)
+==16123== 
+==16123== 504 bytes in 21 blocks are still reachable in loss record 22 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48A34B2: _nc_add_to_try (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A5FA0: _nc_init_keytry (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A71F5: _nc_keypad (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C87E: main (bfcpu_environment.cc:17)
+==16123== 
+==16123== 512 bytes in 1 blocks are still reachable in loss record 23 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48905DC: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 608 bytes in 1 blocks are still reachable in loss record 24 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x488C7C5: _nc_makenew_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C9AF: newwin_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890A49: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 608 bytes in 1 blocks are still reachable in loss record 25 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x488C7C5: _nc_makenew_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C9AF: newwin_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890A6F: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 608 bytes in 1 blocks are still reachable in loss record 26 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x488C7C5: _nc_makenew_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C9AF: newwin_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890C01: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 616 bytes in 1 blocks are still reachable in loss record 27 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48AEC22: _nc_read_termtype (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AEDAD: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF175: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF2A5: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 616 bytes in 1 blocks are still reachable in loss record 28 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x48A3C9A: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A83E1: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 640 bytes in 1 blocks are still reachable in loss record 29 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x4883734: _nc_reserve_pairs (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4883832: start_color_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x116C6A: init_command_win_colors() (command_win_colors.cc:8)
+==16123==    by 0x10C897: main (bfcpu_environment.cc:21)
+==16123== 
+==16123== 883 bytes in 1 blocks are still reachable in loss record 30 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x48AECAE: _nc_read_termtype (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AEDAD: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF175: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF2A5: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 1,200 bytes in 50 blocks are still reachable in loss record 31 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48A3526: _nc_add_to_try (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A5FA0: _nc_init_keytry (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A71F5: _nc_keypad (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C87E: main (bfcpu_environment.cc:17)
+==16123== 
+==16123== 1,568 bytes in 1 blocks are still reachable in loss record 32 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48A87A7: new_prescr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C568: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 1,576 bytes in 1 blocks are still reachable in loss record 33 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x48AE30B: _nc_read_termtype (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AEDAD: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF175: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF2A5: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 1,680 bytes in 70 blocks are still reachable in loss record 34 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48A34B2: _nc_add_to_try (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A5EAE: _nc_init_keytry (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A71F5: _nc_keypad (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C87E: main (bfcpu_environment.cc:17)
+==16123== 
+==16123== 1,872 bytes in 1 blocks are still reachable in loss record 35 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x487FC84: _nc_hash_map_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x487F125: _nc_scroll_optimize_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x489D778: doupdate_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488E286: wrefresh (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x118B7A: getnstr_esc_seed(char*, int) (ncurses_util.cc:77)
+==16123==    by 0x10F0B4: CommandWin::take_inline(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (command_win.cc:237)
+==16123==    by 0x10EF81: CommandWin::take_inline() (command_win.cc:226)
+==16123==    by 0x10F4A3: CommandWin::next_comm() (command_win.cc:285)
+==16123==    by 0x10C913: main (bfcpu_environment.cc:25)
+==16123== 
+==16123== 2,088 bytes in 87 blocks are still reachable in loss record 36 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48A3526: _nc_add_to_try (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A5EAE: _nc_init_keytry (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A71F5: _nc_keypad (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C87E: main (bfcpu_environment.cc:17)
+==16123== 
+==16123== 3,584 bytes in 1 blocks are still reachable in loss record 37 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x48A1880: _nc_init_wacs (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890E55: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 3,896 bytes in 1 blocks are still reachable in loss record 38 of 45
+==16123==    at 0x483AD7B: realloc (vg_replace_malloc.c:836)
+==16123==    by 0x48A5A54: _nc_doalloc (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AE9D3: _nc_read_termtype (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AEDAD: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF175: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48AF2A5: _nc_read_entry2 (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A7FF9: _nc_setup_tinfo (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A8381: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 3,896 bytes in 1 blocks are still reachable in loss record 39 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x48A3B71: ??? (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x48A83E1: _nc_setupterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0AA: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 5,587 bytes in 1 blocks are still reachable in loss record 40 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x4893FF1: _nc_printf_string_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488D842: vwprintw (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488DABB: mvprintw (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10DF96: CommandWin::render_mem(int, int) (command_win.cc:37)
+==16123==    by 0x10DE76: CommandWin::update() (command_win.cc:19)
+==16123==    by 0x10F1AB: CommandWin::next_comm() (command_win.cc:249)
+==16123==    by 0x10C913: main (bfcpu_environment.cc:25)
+==16123== 
+==16123== 6,080 bytes in 1 blocks are still reachable in loss record 41 of 45
+==16123==    at 0x483877F: malloc (vg_replace_malloc.c:309)
+==16123==    by 0x4890703: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 7,168 bytes in 1 blocks are still reachable in loss record 42 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x4883A9F: start_color_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x116C6A: init_command_win_colors() (command_win_colors.cc:8)
+==16123==    by 0x10C897: main (bfcpu_environment.cc:21)
+==16123== 
+==16123== 155,344 bytes in 38 blocks are still reachable in loss record 43 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x488CA01: newwin_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890A49: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 155,344 bytes in 38 blocks are still reachable in loss record 44 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x488CA01: newwin_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890A6F: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== 155,344 bytes in 38 blocks are still reachable in loss record 45 of 45
+==16123==    at 0x483AB65: calloc (vg_replace_malloc.c:762)
+==16123==    by 0x488CA01: newwin_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4890C01: _nc_setupscreen_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C0EE: newterm_sp (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x488C57A: newterm (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x4888775: initscr (in /usr/lib/libncursesw.so.6.1)
+==16123==    by 0x10C860: main (bfcpu_environment.cc:14)
+==16123== 
+==16123== LEAK SUMMARY:
+==16123==    definitely lost: 0 bytes in 0 blocks
+==16123==    indirectly lost: 0 bytes in 0 blocks
+==16123==      possibly lost: 0 bytes in 0 blocks
+==16123==    still reachable: 514,590 bytes in 380 blocks
+==16123==         suppressed: 0 bytes in 0 blocks
+==16123== 
+==16123== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
