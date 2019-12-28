@@ -8,6 +8,7 @@ ProgWin::ProgWin(const std::string file, int length, int width) {
     scale_index = 0;
 
     cursor_index = 0;
+    cursor_inline = 0;
 
     std::ifstream prog_stream;
     prog_stream.open(file);
@@ -131,12 +132,16 @@ void ProgWin::move_cursor(int dir) {
             at_line = get_line_from_index(cursor_index);
             if(at_line < static_cast<int>(line_starts.size() - 1)) {
                 cursor_index = line_starts[at_line + 1];
+                int line_length = line_starts[at_line + 2] - cursor_index - 2;
+                cursor_index += std::max(0, std::min(line_length, cursor_inline));
             }
             break;
         case UP:
             at_line = get_line_from_index(cursor_index);
             if(at_line > 0) {
                 cursor_index = line_starts[at_line - 1];
+                int line_length = line_starts[at_line] - cursor_index - 2;
+                cursor_index += std::max(0, std::min(line_length, cursor_inline));
             }
             break;
         case LEFT:
@@ -146,6 +151,7 @@ void ProgWin::move_cursor(int dir) {
                 } else {
                     cursor_index--;
                 }
+                cursor_inline = cursor_index - line_starts[get_line_from_index(cursor_index)];
             }
             break;
         case RIGHT:
@@ -155,6 +161,7 @@ void ProgWin::move_cursor(int dir) {
                 } else {
                     cursor_index++;
                 }
+                cursor_inline = cursor_index - line_starts[get_line_from_index(cursor_index)];
             }
             break;
     }
@@ -167,6 +174,26 @@ void ProgWin::set_cursor(int to_line) {
     cursor_index = line_starts[to_line];
 }
 
+bool ProgWin::at_break(int index) {
+    if(index < 0 || index >= static_cast<int>(prog.length())) {
+        throw std::runtime_error("Index to poll break is out of bounds.");
+    }
+    return p_breaks.count(index) > 0;
+}
+
+bool ProgWin::at_break(BFCPUInterpreter &bfi) {
+    return p_breaks.count(static_cast<int>(bfi.get_prog_ptr())) > 0;
+}
+
+void ProgWin::toggle_break_at_cursor() {
+    if(is_bfcpu_char(prog[cursor_index])) {
+        if(p_breaks.count(cursor_index)) {
+            p_breaks.erase(cursor_index);
+        } else {
+            p_breaks.insert(cursor_index);
+        }
+    }
+}
 
 
 

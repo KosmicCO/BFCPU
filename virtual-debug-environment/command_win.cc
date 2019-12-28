@@ -18,11 +18,14 @@ void CommandWin::update() {
         mvhline(split - 1, 0, ACS_HLINE, COLS);
         render_mem(split - 1, COLS);
         render_prog(LINES - split, COLS);
-        if(mem_win.in_visual_mode()) {
-            mvprintw(LINES - 1, 0, "[Visual]");
-        }
+        mvprintw(LINES - 1, 0, bottom_text.c_str());
+        render_mode();
     }
     refresh();
+}
+
+void CommandWin::set_viewer_state() {
+    bottom_text = "";
 }
 
 void CommandWin::render_mem(int length, int width) {
@@ -53,19 +56,28 @@ void CommandWin::render_mem(int length, int width) {
             cur = 0;
             cur |= mem_win.pointed_to(index) ? 1 : 0;
             cur |= mem_win.at_cursor(index) ? 2 : 0;
+            cur |= mem_win.at_break(index) ? 4 : 0;
 
             switch(cur) {
-                case 1: attron(COLOR_PAIR(PAIR_HIGHLIGHT_WHITE));           break;
-                case 2: attron(COLOR_PAIR(PAIR_HIGHLIGHT_GREEN));           break;
-                case 3: attron(COLOR_PAIR(PAIR_HIGHLIGHT_LIGHT_GREEN));     break;
+                case 0b001: attron(COLOR_PAIR(PAIR_HIGHLIGHT_WHITE));           break;
+                case 0b010: attron(COLOR_PAIR(PAIR_HIGHLIGHT_GREEN));           break;
+                case 0b011: attron(COLOR_PAIR(PAIR_HIGHLIGHT_LIGHT_GREEN));     break;
+                case 0b100: attron(COLOR_PAIR(PAIR_HIGHLIGHT_DEEP_RED));        break;
+                case 0b101: attron(COLOR_PAIR(PAIR_HIGHLIGHT_YELLOW));          break;
+                case 0b110: attron(COLOR_PAIR(PAIR_HIGHLIGHT_RED));             break;
+                case 0b111: attron(COLOR_PAIR(PAIR_HIGHLIGHT_ORANGE));          break;
             }
 
             mvprintw(i + 1, j * 6 + 1, " %4x", mem_win.get_tape_data(index));
 
             switch(cur) {
-                case 1: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_WHITE));          break;
-                case 2: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_GREEN));          break;
-                case 3: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_LIGHT_GREEN));    break;
+                case 0b001: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_WHITE));           break;
+                case 0b010: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_GREEN));           break;
+                case 0b011: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_LIGHT_GREEN));     break;
+                case 0b100: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_DEEP_RED));        break;
+                case 0b101: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_YELLOW));          break;
+                case 0b110: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_RED));             break;
+                case 0b111: attroff(COLOR_PAIR(PAIR_HIGHLIGHT_ORANGE));          break;
             }
 
             index++;
@@ -120,14 +132,19 @@ void CommandWin::render_prog(int length, int width) {
         } else {
             int flags = prog_win.pointed_to(index, bfi) ? 1 : 0;
             flags |= prog_win.at_cursor(index) ? 2 : 0;
-            
+            flags |= prog_win.at_break(index) ? 4 : 0;
+
             int mod;
 
             switch(flags) {
-                case 0: mod = A_NORMAL;                                break;
-                case 1: mod = COLOR_PAIR(PAIR_HIGHLIGHT_WHITE);        break;
-                case 2: mod = COLOR_PAIR(PAIR_HIGHLIGHT_GREEN);        break;
-                case 3: mod = COLOR_PAIR(PAIR_HIGHLIGHT_LIGHT_GREEN);  break;
+                case 0b000: mod = A_NORMAL;                                 break;
+                case 0b001: mod = COLOR_PAIR(PAIR_HIGHLIGHT_WHITE);         break;
+                case 0b010: mod = COLOR_PAIR(PAIR_HIGHLIGHT_GREEN);         break;
+                case 0b011: mod = COLOR_PAIR(PAIR_HIGHLIGHT_LIGHT_GREEN);   break;
+                case 0b100: mod = COLOR_PAIR(PAIR_HIGHLIGHT_DEEP_RED);      break;
+                case 0b101: mod = COLOR_PAIR(PAIR_HIGHLIGHT_YELLOW);        break;
+                case 0b110: mod = COLOR_PAIR(PAIR_HIGHLIGHT_RED);           break;
+                case 0b111: mod = COLOR_PAIR(PAIR_HIGHLIGHT_ORANGE);        break;
             }
 
             addch(next | mod);
@@ -148,6 +165,13 @@ void CommandWin::render_prog(int length, int width) {
 
 }
 
+void CommandWin::render_mode() {
+    if(mem_win.in_visual_mode()) {
+        std::string mode = "[VISUAL]";
+        mvprintw(LINES - 1, COLS - mode.length() - 1, mode.c_str());
+    }
+}
+
 void split_comm(comm_t &tokens, const std::string str) {
     tokens.clear();
     boost::split(tokens, str, boost::is_any_of(" "));
@@ -156,14 +180,20 @@ void split_comm(comm_t &tokens, const std::string str) {
 }
 
 enum comm_code {
-    com_q,
-    com_set,
+    com_q,      // quit
+    com_set,    // sets cell of mem
+    com_jp,     // jumps to line in prog
+    com_jv,     // jumps to addr in mem
+    com_run,
     undef
 };
 
 comm_code get_comm_code(std::string head) {
     if(head == "q")         return com_q;
     if(head == "set")       return com_set;
+    if(head == "jp")        return com_jp;
+    if(head == "jv")        return com_jv;
+    if(head == "run")       return com_run;
     return undef;
 }
 
@@ -177,8 +207,11 @@ bool CommandWin::parse_comm(std::string comm) {
     split_comm(tokens, comm);
 
     switch(get_comm_code(tokens[0])){
-        case com_q: return false;
-        case com_set: cm_set(tokens); break;
+        case com_q:     return false;
+        case com_set:   cm_set(tokens);     break;
+        case com_jp:    cm_jp(tokens);      break;
+        case com_jv:    cm_jv(tokens);      break;
+        case com_run:   cm_run(tokens);     break;
         case undef: undefined(tokens);
     }
 
@@ -196,7 +229,7 @@ void CommandWin::cm_set(comm_t &tokens) {
     tokens.erase(std::remove_if(tokens.begin(), tokens.end(), [] (const std::string s) { return s.length() >= 2 && s[0] == '-' && !isdigit(s[1]); }), tokens.end());
 
     if(tokens.size() < 4) {
-        mvprintw(LINES - 1, 1, "Takes a minimum of 3 arguments");
+        bottom_text = "Takes a minimum of 3 arguments";
         return;
     }
 
@@ -205,8 +238,7 @@ void CommandWin::cm_set(comm_t &tokens) {
         if(flag == "-h") {
             d_flag = 1;
         } else {
-            mvprintw(LINES - 1, 1, ("Not a valid flag: " + flag).c_str());
-            refresh();
+            bottom_text = "Not a valid flag: " + flag;
             return;
         }
     }
@@ -231,13 +263,82 @@ void CommandWin::cm_set(comm_t &tokens) {
                 break;
         }
     } catch(...) {
-        mvprintw(LINES - 1, 1, "Error parsing values");
+        bottom_text = "Error parsing values";
+        return;
+    }
+}
+
+void CommandWin::cm_jp(comm_t &tokens) {
+    if(tokens.size() == 1) {
+        prog_win.set_cursor(prog_win.get_line());
+        return;
+    }
+    try {
+        int line = stoi(tokens[1], nullptr, 0);
+        if(line < 0 || line >= prog_win.get_num_lines()) {
+            bottom_text = "Line number out of bounds";
+        }
+        prog_win.line_jump(line);
+        prog_win.set_cursor(line);
+    } catch(...) {
+        bottom_text = "Error parsing value";
+    }
+}
+
+void CommandWin::cm_jv(comm_t &tokens) {
+    if(1 == tokens.size()) {
+        mem_win.jump_to_ptr(bfi);
+        return;
+    }
+    try {
+        uint16_t addr = static_cast<uint16_t>(stoi(tokens[1], nullptr, 0) & 0xFFFF);
+        if(static_cast<int>(tokens.size()) == 2) {
+            mem_win.set_offset(addr, mem_win.get_page());
+        } else {
+            uint16_t page = static_cast<uint16_t>(stoi(tokens[2], nullptr, 0) & 0xFFFF);
+            mem_win.set_offset(addr, page);
+        }
+    } catch(...) {
+        bottom_text = "Error parsing value";
+    }
+}
+
+bool CommandWin::run_till_break(int cycles) {
+    bool no_stop = cycles == -1;
+    bool running = true;
+    while((no_stop || cycles > 0) && running) {
+        running = bfi.next();
+        if(prog_win.at_break(bfi) || mem_win.at_break(bfi)) {
+            return running;
+        }
+    }
+    return running;
+}
+
+void CommandWin::cm_run(comm_t &tokens) {
+    int cycles = -1;
+    try {
+        if(tokens.size() == 2) {
+            cycles = stoi(tokens[1], nullptr, 0);
+            if(cycles < -2) {
+                bottom_text = "Invalid number of run cycles inputed: " + std::to_string(cycles);
+                return;
+            }
+        }
+
+        run_till_break(-1);
+        if(!mem_win.pointer_in_tape(bfi)) {
+            mem_win.jump_to_ptr(bfi);
+        }
+        prog_win.jump_to_ptr(bfi);
+    } catch (...) {
+        bottom_text = "Error parsing value";
         return;
     }
 }
 
 void CommandWin::undefined(comm_t &tokens) {
-    mvprintw(LINES - 1, 1, ("Command not found: " + tokens[0]).c_str());
+    bottom_text = "Command not found: " + tokens[0];
 }
 
 bool CommandWin::take_inline() {
@@ -247,6 +348,8 @@ bool CommandWin::take_inline() {
 bool CommandWin::take_inline(std::string seed) {
     move(LINES - 1, 0);
     clrtoeol();
+    render_mode();
+    move(LINES - 1, 0);
     addch(':');
     curs_set(1);
 
@@ -266,6 +369,8 @@ bool CommandWin::take_inline(std::string seed) {
 bool CommandWin::next_comm() {
     update();
     int comm = getch();
+    bool ret = true;
+    set_viewer_state();
     if(mem_win.in_visual_mode()) {
         switch(comm) {
             case 27:
@@ -282,36 +387,49 @@ bool CommandWin::next_comm() {
             case 'u': mem_win.move_offset(DOWN);                break;
             case 'i': mem_win.move_offset(UP);                  break;
             case 'o': mem_win.move_offset(RIGHT);               break;
-            case 'p': return lv_set_at() ;
-            case ':': return take_inline();                     break;
+            case KEY_NPAGE:
+            case ';':
+            case 'I': prog_win.line_down();                     break;
+            case KEY_PPAGE:
+            case '\'':
+            case 'U': prog_win.line_up();                       break;
+            case 'b': mem_win.toggle_break_at_cursor();         break;
+            case 't': mem_win.jump_to_ptr(bfi);                 break;        
+            case 'p': ret = lv_set_at();                        break;
+            case 'g': ret = take_inline("jv ");                 break;
+            case 'r': ret = take_inline("run ");                break;
+            case ':': ret = take_inline();                      break;
         }
     } else {
         switch(comm) {
-            case 'v': mem_win.set_visual_mode(true);    break;
-            case 'f': mid_split++;                      break;
-            case 'r': mid_split--;                      break;
-            case 's':
-            case 'n': bfi.next();                       break;
+            case 'v': mem_win.set_visual_mode(true);        break;
+            case 'D': mid_split++;                          break;
+            case 'E': mid_split--;                          break;
+            case 's': bfi.next();                           break;
             case KEY_LEFT:
-            case 'h': prog_win.move_cursor(LEFT);       break;
+            case 'h': prog_win.move_cursor(LEFT);           break;
             case KEY_DOWN:
-            case 'j': prog_win.move_cursor(DOWN);       break;
+            case 'j': prog_win.move_cursor(DOWN);           break;
             case KEY_UP:
-            case 'k': prog_win.move_cursor(UP);         break;
+            case 'k': prog_win.move_cursor(UP);             break;
             case KEY_RIGHT:
-            case 'l': prog_win.move_cursor(RIGHT);      break;
+            case 'l': prog_win.move_cursor(RIGHT);          break;
             case KEY_NPAGE:
-            case 'd': prog_win.line_down();             break;
+            case 'd': prog_win.line_down();                 break;
             case KEY_PPAGE:
-            case 'e': prog_win.line_up();               break;
-            case 'y': mem_win.move_offset(LEFT);        break;
-            case 'u': mem_win.move_offset(DOWN);        break;
-            case 'i': mem_win.move_offset(UP);          break;
-            case 'o': mem_win.move_offset(RIGHT);       break;
-            case ':': return take_inline();             break;
+            case 'e': prog_win.line_up();                   break;
+            case 'y': mem_win.move_offset(LEFT);            break;
+            case 'u': mem_win.move_offset(DOWN);            break;
+            case 'i': mem_win.move_offset(UP);              break;
+            case 'o': mem_win.move_offset(RIGHT);           break;
+            case 'b': prog_win.toggle_break_at_cursor();    break;
+            case 't': prog_win.jump_to_ptr(bfi);            break;
+            case 'g': ret = take_inline("jp ");             break;
+            case 'r': ret = take_inline("run ");            break;
+            case ':': ret = take_inline();                  break;
         }
     }
-    return true;
+    return ret;
 }
 
 bool CommandWin::lv_set_at() {

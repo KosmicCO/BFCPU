@@ -31,6 +31,9 @@ MemoryWin::MemoryWin(BFCPUInterpreter &bfi, int len, int cols) {
     tape_offset = 0;
     page_offset = 0;
 
+    std::set<address_t> a;
+    t_breaks = a;
+
     visual_mode = false;
     cursor_index = 0;
     reinit(bfi, len);
@@ -128,6 +131,18 @@ void MemoryWin::move_visual_cursor(int dir) {
     }
 }
 
+bool MemoryWin::pointer_in_tape(BFCPUInterpreter &bfi) {
+    if(page_offset != bfi.get_page_ptr()) {
+        return false;
+    }
+    uint16_t norm = bfi.get_data_ptr() - tape_offset;
+    return tape_length > norm;
+}
+
+void MemoryWin::jump_to_ptr(BFCPUInterpreter &bfi) {
+    set_offset(bfi.get_data_ptr(), bfi.get_page_ptr());
+}
+
 bool MemoryWin::pointed_to(int index) {
     if(index < 0 || index >= tape_length) {
         throw std::runtime_error("Point index is out of bounds.");
@@ -140,3 +155,25 @@ void MemoryWin::set_offset(uint16_t tape_off, uint16_t page_off) {
     tape_offset = tape_off;
     page_offset = page_off;
 }
+
+
+bool MemoryWin::at_break(int index) {
+    return t_breaks.count(std::make_pair(static_cast<uint16_t>(index) + tape_offset, page_offset)) > 0;
+}
+
+bool MemoryWin::at_break(BFCPUInterpreter &bfi) {
+    return t_breaks.count(std::make_pair(bfi.get_data_ptr(), bfi.get_page_ptr())) > 0;
+}
+
+void MemoryWin::toggle_break_at_cursor() {
+    address_t f_addr = std::make_pair(static_cast<uint16_t>(cursor_index) + tape_offset, page_offset);
+    if(t_breaks.count(f_addr)) {
+        t_breaks.erase(f_addr);
+    } else {
+        t_breaks.insert(f_addr);
+    }
+}
+
+
+
+
