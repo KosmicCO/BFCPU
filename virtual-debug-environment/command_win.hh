@@ -40,6 +40,7 @@ class CommandWin {
         // letter commands
         
         bool lv_set_at();
+        void lv_inc_page(int dir);
 
         // commands
 
@@ -47,6 +48,7 @@ class CommandWin {
         void cm_jp(comm_t &); // jump to line (prog_win)
         void cm_jv(comm_t &); // jump to line (mem_win)
         void cm_run(comm_t &);
+        void cm_p(comm_t &); // jump to page
 
         void undefined(comm_t &);
 };

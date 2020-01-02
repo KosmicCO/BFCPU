@@ -17,14 +17,14 @@ class DataTape : public Tape {
         void write(uint16_t address, uint16_t value);
         void set_page(uint16_t s_page);
         uint16_t get_page();
-        uint16_t get_num_pages();
+        int get_num_pages();
 
         void get_data(uint16_t start, uint16_t end, uint16_t * arr);
         void get_data_from_page(uint16_t start, uint16_t end, uint16_t * arr, uint16_t from_page);
         void write_to_page(uint16_t address, uint16_t to_page, uint16_t value);
     private:
         uint16_t ** memory;
-        uint16_t num_pages;
+        int num_pages;
         uint16_t page;
 
         void touch_page(uint16_t t_page);

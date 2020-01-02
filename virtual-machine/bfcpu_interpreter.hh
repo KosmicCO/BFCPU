@@ -27,7 +27,7 @@ class BFCPUInterpreter {
         
         uint16_t get_time();
         void set_time(uint16_t ntime);
-        uint16_t get_num_pages();
+        int get_num_pages();
         uint16_t get_page_ptr();
         uint16_t get_data_ptr();
         uint16_t get_prog_ptr();

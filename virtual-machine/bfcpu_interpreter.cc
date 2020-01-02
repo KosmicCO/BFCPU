@@ -162,7 +162,7 @@ void BFCPUInterpreter::set_time(uint16_t ntime) {
     clock_time = ntime;
 }
 
-uint16_t BFCPUInterpreter::get_num_pages() {
+int BFCPUInterpreter::get_num_pages() {
     return data_tape->get_num_pages();
 }
 

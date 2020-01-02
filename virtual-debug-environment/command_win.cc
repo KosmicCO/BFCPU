@@ -184,7 +184,8 @@ enum comm_code {
     com_set,    // sets cell of mem
     com_jp,     // jumps to line in prog
     com_jv,     // jumps to addr in mem
-    com_run,
+    com_run,    // run until break
+    com_p,      // jump to page
     undef
 };
 
@@ -194,6 +195,7 @@ comm_code get_comm_code(std::string head) {
     if(head == "jp")        return com_jp;
     if(head == "jv")        return com_jv;
     if(head == "run")       return com_run;
+    if(head == "p")         return com_p;
     return undef;
 }
 
@@ -212,6 +214,7 @@ bool CommandWin::parse_comm(std::string comm) {
         case com_jp:    cm_jp(tokens);      break;
         case com_jv:    cm_jv(tokens);      break;
         case com_run:   cm_run(tokens);     break;
+        case com_p:     cm_p(tokens);       break;
         case undef: undefined(tokens);
     }
 
@@ -311,6 +314,7 @@ bool CommandWin::run_till_break(int cycles) {
         if(prog_win.at_break(bfi) || mem_win.at_break(bfi)) {
             return running;
         }
+        cycles--;
     }
     return running;
 }
@@ -333,6 +337,28 @@ void CommandWin::cm_run(comm_t &tokens) {
         prog_win.jump_to_ptr(bfi);
     } catch (...) {
         bottom_text = "Error parsing value";
+        return;
+    }
+}
+
+void CommandWin::cm_p(comm_t &tokens) {
+    if(tokens.size() == 1) {
+        mem_win.set_offset(mem_win.get_offset(), bfi.get_page_ptr());
+        return;
+    }
+    if(static_cast<int>(tokens.size()) > 2) {
+        bottom_text = "Too many arguments";
+        return;
+    }
+    try {
+        int pg = stoi(tokens[1], nullptr, 0);
+        if(pg < 0 || pg >= bfi.get_num_pages()) {
+            bottom_text = "Page not in bounds";
+            return;
+        }
+        mem_win.set_offset(mem_win.get_offset(), static_cast<uint16_t>(pg));
+    } catch (...) {
+        bottom_text = "Error parsing page";
         return;
     }
 }
@@ -395,6 +421,8 @@ bool CommandWin::next_comm() {
             case 'U': prog_win.line_up();                       break;
             case 'b': mem_win.toggle_break_at_cursor();         break;
             case 't': mem_win.jump_to_ptr(bfi);                 break;        
+            case '{': lv_inc_page(UP);                          break;
+            case '}': lv_inc_page(DOWN);                        break;
             case 'p': ret = lv_set_at();                        break;
             case 'g': ret = take_inline("jv ");                 break;
             case 'r': ret = take_inline("run ");                break;
@@ -418,6 +446,8 @@ bool CommandWin::next_comm() {
             case 'd': prog_win.line_down();                 break;
             case KEY_PPAGE:
             case 'e': prog_win.line_up();                   break;
+            case '{': lv_inc_page(UP);                      break;
+            case '}': lv_inc_page(DOWN);                    break;
             case 'y': mem_win.move_offset(LEFT);            break;
             case 'u': mem_win.move_offset(DOWN);            break;
             case 'i': mem_win.move_offset(UP);              break;
@@ -441,6 +471,35 @@ bool CommandWin::lv_set_at() {
 
     return take_inline("set 0x" + addr.str() + " 0x" + page.str() + " ");
 }
+
+void CommandWin::lv_inc_page(int dir) {
+    uint16_t pg;
+    switch(dir) {
+        case DOWN:
+            pg = mem_win.get_page();
+            if(bfi.get_num_pages() - 1 <= pg) {
+                pg = 0;
+            } else {
+                pg++;
+            }
+            mem_win.set_offset(mem_win.get_offset(), pg);
+            break;
+        case UP:
+            pg = mem_win.get_page();
+            if(pg == 0) {
+                pg = bfi.get_num_pages() - 1;
+            } else {
+                pg--;
+            }
+            mem_win.set_offset(mem_win.get_offset(), pg);
+            break;
+    }
+}
+
+
+
+
+
 
 
 

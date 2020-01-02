@@ -44,7 +44,7 @@ uint16_t DataTape::get_page() {
     return page;
 }
 
-uint16_t DataTape::get_num_pages() {
+int DataTape::get_num_pages() {
     return num_pages;
 }
 
