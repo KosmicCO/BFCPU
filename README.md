@@ -2,11 +2,11 @@
 
 ### List of In-Development Units
 
- - NCurses interactive virtual machine
- - Memory structure
- - Window to view memory
+ - Keyboard and Terminal peripherals
  
 ### List of In-Progress Unit Testing
+
+ - NCurses interactive virtual machine (testing ui for ease of use)
 
 ### List of finished Unit Testing
 

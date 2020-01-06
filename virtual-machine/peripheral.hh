@@ -2,6 +2,8 @@
 
 #include <cinttypes>
 
+const uint16_t PCM_HARDWARE = 0;
+
 class Peripheral {
     public:
         virtual ~Peripheral() = default;
