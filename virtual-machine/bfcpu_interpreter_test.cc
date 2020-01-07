@@ -5,6 +5,7 @@
 #include "non_protocol_print.hh"
 #include "peripheral.hh"
 #include "peripherals/ncurses_keyboard_terminal.hh"
+#include <chrono>
 
 int main(int argc, char ** argv) {
     if(argc != 2) {
@@ -31,7 +32,19 @@ int main(int argc, char ** argv) {
     BFCPUInterpreter bfi(rom_stream, perphs, 1948);
     rom_prog.close();
 
-    while(bfi.next());
+    auto last_time = std::chrono::system_clock::now();
+    auto cur_time = last_time;
+    term->render();
+    const std::chrono::duration<double, std::ratio<1, 30>> frame_time(1);
+
+    while(bfi.next()) {
+        cur_time = std::chrono::system_clock::now();
+        std::chrono::duration<double> diff = cur_time - last_time;
+        if(diff >= frame_time) {
+            term->render();
+            last_time = cur_time;
+        }
+    };
     
     /*
     for(Peripheral * p : perphs) {
