@@ -1,8 +1,8 @@
 CXX=g++
-CXXFLAGS=-Wall -Wextra -pedantic -Werror -std=c++17 -g
+CXXFLAGS=-Wall -Wextra -pedantic -Werror -lpthread -lncursesw -std=c++17 -g
 OPTFLAGS=-O3
 LDFLAGS=$(CXXFLAGS) $(OPTFLAGS)
-SRC=data_tape.cc peripheral_tape.cc bfcpu_interpreter.cc non_protocol_print.cc peripherals/keyboard_interface.cc
+SRC=data_tape.cc peripheral_tape.cc bfcpu_interpreter.cc non_protocol_print.cc peripherals/keyboard_interface.cc peripherals/ncurses_keyboard_terminal.cc peripherals/hardware_info.cc
 TESTS=data_tape_test peripheral_tape_test bfcpu_interpreter_test
 TESTOBJ=data_tape_test.o peripheral_tape_test.o bfcpu_interpreter.o bfcpu_interpreter_test.o
 OBJ=$(SRC:.cc=.o)
