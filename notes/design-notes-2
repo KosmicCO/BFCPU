@@ -1,0 +1,27 @@
+=====Peripheral Interfaces=====
+
+Most will have a cpu lead command structure such that the cpu initiates communication to the peripheral and leads reading from peripherals.
+
+Common codes:
+
+0x0000: Peripheral Information (reading returns general peripheral info)
+
+peripherals will generally follow commands promptly after recieving them.
+
+-----Keyboard------------------
+
+The keyboard will store key presses and return them to the cpu when prompted
+
+0x0000: Peripheral Information (info stream)
+0x0001: Get key inputs (key stream)
+
+If there is no new key to server, returns 0x0000
+
+-----Terminal------------------
+
+The terminal will store the screen state (detailed by character usage).
+
+0x0000: Peripheral Information (info stream)
+0x0001: Send charcode stream (utf-8 codes, end with 0x0000)
+0x0002: Receive Terminal Information (features flags)
+0x0003: Send Terminal commands (see chart)
