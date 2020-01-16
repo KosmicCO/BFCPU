@@ -1,0 +1,20 @@
+BFASM
+
+This program compiles bfmacro files (bfm) to bfcpu code and bfasm files (bfa) to bfmacro (bfm) files.
+Note that the compiler creates bfmc files from bfm files which are simply the finished linked compiled files such that it does not have references to the linked files or functions (only function definitions)
+
+BFMACRO Programs
+
+If file begins with :COMP-MACRO, then it follows the compiled macro specifications (as above)
+
+bfmacro programs are bf programs except with a helpful macro and primitive linker and debugger (for the macros).
+The beginning of the file is assumed to be where the includes and "main" bf program is kept.
+To define a new macro function, say FOO, the given structure would be %(FOO), followed by its definition which should run untill the next definition.
+To use the foo function in bfcpu code, use $(FOO).
+To insert a number into a cell, say 0x40F2, use $(0x40F2).
+To include another bfmacro file, with path "folder/file.bfm", put !folder/file.bfm FILE.
+This imports the file file.bfm into the program as space file (so that referencing a function BAR from it can be done with $(FILE:BAR) ).
+Having only "!folder/file.bfm" merges the functions in file.bfm with the namespace of the main file.
+
+
+NOTE: Still need to plan out exact details to work with easily compiling as well.
